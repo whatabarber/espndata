@@ -1,31 +1,41 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ESPN Fantasy Data</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fantasy Draft Assistant - ESPN Live</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 40px; background: #f8f9fa; }
-    pre { background: #eee; padding: 20px; border-radius: 8px; }
+    body { font-family: Arial, sans-serif; text-align: center; margin: 50px; background: #f3f4f6; color: #111; }
+    h1 { color: #1e40af; }
+    .player { border: 1px solid #ddd; background: #fff; margin: 10px auto; padding: 10px; width: 80%; border-radius: 8px; }
   </style>
 </head>
 <body>
-  <h1>Live ESPN Fantasy League Data</h1>
-  <pre id="output">Loading...</pre>
+  <h1>🏈 ESPN Fantasy Draft Assistant</h1>
+  <p>Live player stats & scoring updates from your ESPN Fantasy League.</p>
+  <div id="output">Loading ESPN Fantasy data...</div>
 
   <script>
-    const LEAGUE = '1505348419'; // your league ID
-    const YEAR = 2025;
-    const URL = `https://fantasy.espn.com/apis/v3/games/ffl/seasons/${YEAR}/segments/0/leagues/${LEAGUE}?view=mRoster`;
+    const LEAGUE_ID = "1505348419"; // Replace with your real ESPN league ID
+    const SEASON_YEAR = "2025";
+    const ESPN_URL = `https://fantasy.espn.com/apis/v3/games/ffl/seasons/${SEASON_YEAR}/segments/0/leagues/${LEAGUE_ID}?view=mMatchupScore&view=mRoster`;
 
-    fetch(`https://corsproxy.io/?${encodeURIComponent(URL)}`)
-      .then((res) => res.json())
-      .then((data) => {
-        document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+    fetch(`https://corsproxy.io/?${encodeURIComponent(ESPN_URL)}`)
+      .then(res => res.json())
+      .then(data => {
+        const output = document.getElementById("output");
+        if (!data.teams) return output.textContent = "No teams found in league.";
+
+        output.innerHTML = data.teams.map(team => {
+          const players = team.roster.entries.map(e => e.playerPoolEntry.player.fullName).join(", ");
+          return `<div class="player"><strong>${team.location} ${team.nickname}</strong><br>${players}</div>`;
+        }).join("");
       })
-      .catch((e) => {
-        document.getElementById('output').textContent = 'Error: ' + e;
+      .catch(e => {
+        document.getElementById("output").textContent = "Error: " + e.message;
       });
   </script>
 </body>
 </html>
+
