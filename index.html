@@ -1,23 +1,12 @@
-<!DOCTYPE html>
-<html>
-  <head><meta charset="utf-8"><title>ESP‑Live Data</title></head>
-  <body>
-    <h1>ESPN Fantasy League Data</h1>
-    <pre id="output">Loading...</pre>
+const LEAGUE = '1505348419'; // your league ID
+const YEAR = 2025;
+const URL = `https://fantasy.espn.com/apis/v3/games/ffl/seasons/${YEAR}/segments/0/leagues/${LEAGUE}?view=mRoster`;
 
-    <script>
-      const LEAGUE = '1505348419'; // Your league ID
-      const YEAR = new Date().getFullYear();
-      const URL = `https://fantasy.espn.com/apis/v3/games/ffl/seasons/${YEAR}/segments/0/leagues/${LEAGUE}?view=mSettings&view=mRoster&view=mScoreboard`;
-
-      fetch(URL)
-        .then(r => r.json())
-        .then(data => {
-          document.getElementById('output').textContent = JSON.stringify(data, null, 2);
-        })
-        .catch(e => {
-          document.getElementById('output').textContent = 'Error: ' + e;
-        });
-    </script>
-  </body>
-</html>
+fetch(`https://corsproxy.io/?${encodeURIComponent(URL)}`)
+  .then((res) => res.json())
+  .then((data) => {
+    document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+  })
+  .catch((e) => {
+    document.getElementById('output').textContent = 'Error: ' + e;
+  });
