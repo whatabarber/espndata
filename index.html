@@ -1,12 +1,31 @@
-const LEAGUE = '1505348419'; // your league ID
-const YEAR = 2025;
-const URL = `https://fantasy.espn.com/apis/v3/games/ffl/seasons/${YEAR}/segments/0/leagues/${LEAGUE}?view=mRoster`;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ESPN Fantasy Data</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 40px; background: #f8f9fa; }
+    pre { background: #eee; padding: 20px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Live ESPN Fantasy League Data</h1>
+  <pre id="output">Loading...</pre>
 
-fetch(`https://corsproxy.io/?${encodeURIComponent(URL)}`)
-  .then((res) => res.json())
-  .then((data) => {
-    document.getElementById('output').textContent = JSON.stringify(data, null, 2);
-  })
-  .catch((e) => {
-    document.getElementById('output').textContent = 'Error: ' + e;
-  });
+  <script>
+    const LEAGUE = '1505348419'; // your league ID
+    const YEAR = 2025;
+    const URL = `https://fantasy.espn.com/apis/v3/games/ffl/seasons/${YEAR}/segments/0/leagues/${LEAGUE}?view=mRoster`;
+
+    fetch(`https://corsproxy.io/?${encodeURIComponent(URL)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+      })
+      .catch((e) => {
+        document.getElementById('output').textContent = 'Error: ' + e;
+      });
+  </script>
+</body>
+</html>
